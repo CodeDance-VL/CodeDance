@@ -14,13 +14,13 @@
 
 --- 
 
-## :mag_right: Roadmap 
+## 🔎 Roadmap 
 **🛠️ CodeDance is under active development.**
 
 We are working on releasing the code and models. We sincerely welcome contributions to this open-source toolkit.
 - [x] Release Paper
-- [ ] Release Dataset
-- [ ] Release Code
+- [x] Release Dataset
+- [x] Release Code
 - [ ] Release Model
 
 --- 
@@ -28,7 +28,7 @@ We are working on releasing the code and models. We sincerely welcome contributi
 ## 📑 Contents 
 
 - [📣 Latest News](#-latest-news)
-- [:mag\_right: Roadmap](#mag_right-roadmap)
+- [🔎 Roadmap](#mag_right-roadmap)
 - [📑 Contents](#-contents)
 - [💡 Overview](#-overview)
 - [🛠️ Installation](#️-installation)
@@ -56,13 +56,47 @@ This design yields transparent, self-checkable solutions to challenging visual s
 
 ## 🛠️ Installation
 
-> [!NOTE]
-> CodeDance code will be released soon. Please stay tuned!
+1. **Clone the repository**
+    ```bash
+    git clone https://github.com/CodeDance-VL/CodeDance.git
+    cd CodeDance
+    ```
+
+2. **Install Dependencies**
+    ```bash
+    bash install.sh
+    ```
 
 ## 🚀 Usage
+### RL Training
 
-> [!NOTE]
-> Usage instructions and inference demos will be updated upon code release.
+RL training scripts are provided in the `examples/` directory.
+
+1. **Deploy Judge**
+
+  ```bash
+  vllm serve Qwen/Qwen2.5-72B-Instruct \
+    --port 18901 \
+    --gpu-memory-utilization 0.8 \
+    --max-model-len 32768 \
+    --tensor-parallel-size 8 \
+    --served-model-name "judge" \
+    --trust-remote-code \
+    --disable-log-requests \
+    --host "::"
+  ```
+
+  ```bash
+  export LLM_AS_A_JUDGE_BASE="http://[Your_IP_here]:18901/v1"
+  ```
+
+2. **Run RL Training**
+
+```bash
+bash examples/run_qwen2.5-vl-7b-sft-tool-codeformat_step_beta0.1.sh
+```
+
+> **Note**: You may need to modify the paths (e.g., `PROJECT_DIR`, `PT_CKPT_PATH`, data paths) in the shell scripts to match your local environment.
 
 ## 📂 Datasets 
 
@@ -71,7 +105,7 @@ This design yields transparent, self-checkable solutions to challenging visual s
 | Dataset | Description | Size | Download |
 | :--- | :--- | :--- | :--- |
 | **CodeDance-SFT** | Executable multi-turn/single turn trajectories for cold-start | 34k | [HuggingFace](https://huggingface.co/datasets/Peterwatwec/CodeDance-SFT) |
-| **CodeDance-RL** | Data for reinforcement learning optimization | - | [Coming Soon] |
+| **CodeDance-RL** | Data for reinforcement learning optimization | 63k | [HuggingFace](https://huggingface.co/datasets/Peterwatwec/CodeDance-RL) |
 
 </div> 
 

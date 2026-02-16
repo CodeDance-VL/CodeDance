@@ -1,0 +1,17 @@
+tools:
+  - class_name: "verl.tools.code_tool.CodeExecuteTool"
+    config: 
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "execute_python_code"
+        description: "Executes Python code within a persistent, sandboxed virtual environment.  This tool is highly effective for a variety of tasks, including mathematical calculations, data analysis, and image manipulation. "
+        parameters:
+          type: "object"
+          properties:
+            code:
+              type: "string"
+              description: "Execute Python code with access to common libraries (PIL, cv2, matplotlib, numpy, etc.). Access input images via 'input_image' variable or 'Image.open('input_image.jpg')'. Output results using print(), plt.show(), or other display functions."
+          required: ["code"]
+
