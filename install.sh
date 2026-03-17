@@ -1,10 +1,6 @@
 #!/bin/bash
-
-
 set -e  
-
-pip uninstall wandb -y
-pip install byted-wandb==0.13.90 -i https://bytedpypi.byted.org/simple
+pip install wandb
 pip install math-verify mathruler
 pip install qwen_vl_utils==0.0.14
 pip install torch==2.8.0 torchvision==0.23.0 torchaudio==2.8.0 --index-url https://download.pytorch.org/whl/cu129

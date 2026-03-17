@@ -9,34 +9,18 @@ export HYDRA_FULL_ERROR=1
 # export TORCH_USE_CUDA_DSA=1
 # export NCCL_DEBUG=INFO
 
+export WANDB_PROJECT="YOUR_PROJECT"
+export WANDB_API_KEY="YOUR WANDB_API_KEY"
 PROJECT_DIR="$(pwd)"
 CONFIG_PATH="$PROJECT_DIR/configs"
 
 mkdir -p logs
 
 rollout_name="sglang" # sglang or vllm
-PT_CKPT_PATH=YOUR_SFT_MODEL
+PT_CKPT_PATH="YOUR MODEL PATH"
 
-
-df_toolbox_v1_path=${DATA_ROOT}/df_toolbox_v1_new_format.parquet
-df_toolbox_v2_path=${DATA_ROOT}/df_toolbox_v2_new_format.parquet
-df_thinklite_new_path=${DATA_ROOT}/df_thinklite_new_format.parquet
-
-chart_rl_path=${DATA_ROOT}/chart_refocus_train_filter_v1.parquet
-pixmo_train_path=${DATA_ROOT}/pixmo_train_filter.parquet
-sa1b_train_path=${DATA_ROOT}/sa1b_rl_filtered.parquet
-
-v_star_path=${DATA_ROOT}/vstar_val.parquet
-mathvision_path=${DATA_ROOT}/mathvision_testmini.parquet
-mathvista_path=${DATA_ROOT}/mathvista_testmini.parquet
-mathverse_path=${DATA_ROOT}/mathverse_vision_only_testmini.parquet
-
-
-pixmo_test_path=${DATA_ROOT}/pixmo_test.parquet
-count_test_path=${DATA_ROOT}/countbench_QA_eval.parquet
-
-train_files="['$df_toolbox_v1_path','$df_toolbox_v2_path', '$df_thinklite_new_path', '$chart_rl_path', '$pixmo_train_path', '$sa1b_train_path']"
-val_files="['$v_star_path', '$count_test_path', '$pixmo_test_path','$mathvision_path','$mathvista_path','$mathverse_path']"
+train_files="['$PROJECT_DIR/CodeDance-RL/data/train-*.parquet']"
+val_files="$train_files"
 
 nohup python3 -m verl.trainer.main_ppo \
     --config-path="$CONFIG_PATH" \
@@ -49,6 +33,7 @@ nohup python3 -m verl.trainer.main_ppo \
     data.truncation='error' \
     data.return_raw_chat=True \
     actor_rollout_ref.model.path="$PT_CKPT_PATH" \
+    data.prompt_key="messages" \
     actor_rollout_ref.actor.optim.lr=1e-6 \
     actor_rollout_ref.model.use_remove_padding=True \
     actor_rollout_ref.actor.ppo_mini_batch_size=256 \
@@ -79,10 +64,10 @@ nohup python3 -m verl.trainer.main_ppo \
     trainer.nnodes=2 \
     actor_rollout_ref.nccl_timeout=3600 \
     trainer.save_freq=20 \
-    trainer.test_freq=300 \
+    trainer.test_freq=-1 \
     trainer.total_epochs=2 \
     trainer.val_before_train=False \
-    trainer.rollout_data_dir='./rollout_sft_step/'\
+    trainer.rollout_data_dir='./rollout_train_step/'\
     trainer.validation_data_dir='./validation_sft_step/'\
     custom_reward_function.path=./verl/utils/reward_score/llm_judge_qwen_tool_step.py \
     custom_reward_function.name=compute_score_batch \
@@ -90,4 +75,4 @@ nohup python3 -m verl.trainer.main_ppo \
     data.train_files="$train_files"   \
     data.val_files="$val_files" \
     actor_rollout_ref.rollout.multi_turn.tool_config_path="$CONFIG_PATH/tool_config.yaml" \
-    "$@" >> logs/run_$(date +%F_%H-%M-%S)_release_test.log 2>&1 & echo $! > logs/run.pid
+    "$@" >> logs/run_$(date +%F_%H-%M-%S).log 2>&1 & echo $! > logs/run.pid

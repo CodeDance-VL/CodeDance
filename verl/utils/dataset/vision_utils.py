@@ -14,6 +14,8 @@
 
 from io import BytesIO
 from typing import Optional
+import base64
+import os
 
 import torch
 from PIL import Image
@@ -24,10 +26,28 @@ def process_image(image: dict | Image.Image, image_patch_size: int = 14) -> Imag
     if isinstance(image, Image.Image):
         return image.convert("RGB")
 
+    if isinstance(image, bytes) or isinstance(image, bytearray):
+        image = {"bytes": bytes(image)}
+    elif isinstance(image, str):
+        if image.startswith("data:image/"):
+            _, data = image.split(",", 1)
+            image = {"bytes": base64.b64decode(data)}
+        elif os.path.exists(image):
+            image = {"path": image}
+        else:
+            image = {"bytes": base64.b64decode(image)}
+
     if "bytes" in image:
         assert "image" not in image, "Cannot have both `bytes` and `image`"
         if image["bytes"] is not None and image["bytes"] != "":
-            image["image"] = Image.open(BytesIO(image["bytes"]))
+            image_bytes = image["bytes"]
+            if isinstance(image_bytes, str):
+                if image_bytes.startswith("data:image/"):
+                    _, data = image_bytes.split(",", 1)
+                    image_bytes = base64.b64decode(data)
+                else:
+                    image_bytes = base64.b64decode(image_bytes)
+            image["image"] = Image.open(BytesIO(image_bytes))
         elif "path" in image and image["path"] is not None:
             image["image"] = Image.open(image["path"])
 
