@@ -1,5 +1,3 @@
-# CodeDance: Layout-Aware Visual Memory for Efficient Long-Horizon Reasoning
-
 <div align="center">
   <img src="assets/theme.png" alt="CodeDance Logo" width="700" style="margin-bottom: 18px;" />
 
