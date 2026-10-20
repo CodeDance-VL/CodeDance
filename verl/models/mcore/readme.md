@@ -1,7 +1,7 @@
 # verl Megatron-Core Models
 Now we use [mbridge](https://github.com/iseekyan/mbridge) to support megatron models. And we will migrate to [megatron-bridge](https://github.com/NVIDIA-NeMo/Megatron-Bridge) in the future.
 
-With the mbridge, we can use allmost all the Megatron-Core features to support new models with little effort. And no offline weights conversion is needed, all the weights conversion is done online. We can directly save the mcore model to huggingface format during training.
+With mbridge, we can use almost all the Megatron-Core features to support new models with little effort. No offline weight conversion is needed; all weight conversion is done online. We can directly save the mcore model in Hugging Face format during training.
 
 Also, we can easily upgrade the mcore version to the latest version. In most cases, the upgrade is seamless. (except when the mcore API changes and we need to update the verl code accordingly)
 
@@ -9,11 +9,11 @@ Also, we can easily upgrade the mcore version to the latest version. In most cas
 1. make sure the model is supported by vLLM
 2. Support the model in [mbridge](https://github.com/iseekyan/mbridge), see its currently supported models for example.
     - we will migrate to [megatron-bridge](https://github.com/NVIDIA-NeMo/Megatron-Bridge) in the future.
-3. Register the model forward function in verl, see the example in `verl/verl/models/mcore/registry.py`.
+3. Register the model forward function in verl, see the example in `verl/models/mcore/registry.py`.
 
 
 
-# Below are deprecated
+# Deprecated implementation
 The earlier versions of verl use `Megatron-LM` 0.4 and workaround huggingface model classes. To better use the latest features and speedup of modern Megatron, we are migrating to `Megatron-Core`(mcore), and use the recommended `GPTModel` class for all language models. With mcore `GPTModel`, we can use the latest features like `context parallel`, `expert parallel`, `dist_checkpointing`, etc. and we can update mcore with little effort in the future for new features.
 
 The migration has been successful with the help of the mcore team and the community. What we have done is:
@@ -21,7 +21,7 @@ The migration has been successful with the help of the mcore team and the commun
 2. migrate `LlamaForCausalLM` and `Qwen2ForCausalLM` to mcore `GPTModel`
 3. support sequence packing/thd format.
 4. support `tensor parallel`, `pipeline parallel`, `sequence parallel`, `virtual pipeline parallel`, `context parallel`.
-5. support the mcore `dist_checkpointing` feature and a basic offline weighs conversion script from huggingface to mcore `dist_checkpointing` format.
+5. support the mcore `dist_checkpointing` feature and a basic offline weight conversion script from huggingface to mcore `dist_checkpointing` format.
 
 We are working on the following features:
 - support `Qwen2MoeForCausalLM`
