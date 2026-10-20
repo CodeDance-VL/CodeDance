@@ -1,5 +1,5 @@
 # Models
-Common modelzoo such as huggingface/transformers stuggles when using Pytorch native model parallelism. Following the design principle of vLLM, we keep a simple, parallelizable, highly-optimized with packed inputs in verl. 
+Common model libraries such as huggingface/transformers struggle with native PyTorch model parallelism. Following the design principle of vLLM, we keep a simple, parallelizable, highly optimized implementation with packed inputs in verl.
 ## Adding a New Huggingface Model
 ### Step 1: Copy the model file from HF to verl
 - Add a new file under verl/models/hf
@@ -15,14 +15,14 @@ Common modelzoo such as huggingface/transformers stuggles when using Pytorch nat
 
 ### Step 2.5: Add tests
 - Add a test to compare this version and the huggingface version
-- Following the infrastructure and add tests to tests/models/hf
+- Follow the infrastructure and add tests to tests/models/hf
 
 ### Step 3: Add a function to apply tensor parallelism
 - Please follow
     - https://pytorch.org/docs/stable/distributed.tensor.parallel.html
     - https://pytorch.org/tutorials/intermediate/TP_tutorial.html
 - General comments
-    - Tensor Parallelism in native Pytorch is NOT auto-parallelism. The way it works is to specify how model parameters and input/output reshards using configs. These configs are then registered as hooks to perform input/output resharding before/after model forward.
+    - Tensor Parallelism in native PyTorch is NOT auto-parallelism. The way it works is to specify how model parameters and input/output reshards using configs. These configs are then registered as hooks to perform input/output resharding before/after model forward.
 
 ### Step 4: Add a function to apply data parallelism
 - Please use FSDP2 APIs

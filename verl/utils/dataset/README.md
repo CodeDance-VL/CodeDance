@@ -1,6 +1,6 @@
 # Dataset Format
 ## RLHF dataset
-We combine all the data sources into a single parquet files. We directly organize the prompt into the chat format so that multi-turn chats can be easily incorporated. In the prompt, we may add instruction following texts to guide the model output the answers in a particular format so that we can extract the answers.
+We combine all the data sources into a single Parquet file. We directly organize the prompt into the chat format so that multi-turn chats can be easily incorporated. In the prompt, we may add instructions to guide the model to output answers in a particular format so that we can extract the answers.
 
 Math problems
 ```json

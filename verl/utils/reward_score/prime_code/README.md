@@ -12,5 +12,5 @@ pip install -r requirements.txt
 pip install flash-attn --no-build-isolation
 ```
 
-### Acknowleage
+### Acknowledgments
 Thank you to the [LiveCodeBench](https://livecodebench.github.io/leaderboard.html) team for their contributions to the open-source community.

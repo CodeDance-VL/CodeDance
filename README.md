@@ -1,5 +1,3 @@
-# CodeDance: Layout-Aware Visual Memory for Efficient Long-Horizon Reasoning
-
 <div align="center">
   <img src="assets/theme.png" alt="CodeDance Logo" width="700" style="margin-bottom: 18px;" />
 
@@ -16,8 +14,8 @@
 
 
 ### 🔥 News
-- **[2026-02]**: 🔥 We released Training scripts for CodeDance.
-- **[2025-12]**: 🤗 We released the [CodeDance paper](https://arxiv.org/abs/2512.17312), [project website](https://codedance-vl.github.io/), and the [CodeDance-SFT](https://huggingface.co/datasets/Peterwatwec/CodeDance-SFT) and [RL](https://huggingface.co/datasets/Peterwatwec/CodeDance-RL) dataset.
+- **[2026-02]**: 🔥 We released training scripts for CodeDance.
+- **[2025-12]**: 🤗 We released the [CodeDance paper](https://arxiv.org/abs/2512.17312), [project website](https://codedance-vl.github.io/), and the [CodeDance-SFT](https://huggingface.co/datasets/Peterwatwec/CodeDance-SFT) and [RL](https://huggingface.co/datasets/Peterwatwec/CodeDance-RL) datasets.
 - **[2025-12]**: 🚀  We introduced CodeDance, a dynamic tool-integrated MLLM that treats executable code as a general solver for visual reasoning.
 
 ## 🌟 Overview
@@ -43,7 +41,7 @@ This design yields transparent, self-checkable solutions to challenging visual s
 The CodeDance pipeline consists of three stages:
 
 ### Stage 1: Cold-start via Supervised Fine-tuning
-We construct a **34k high-quality dataset** of executable multi-turn trajectories to initialize the model.
+We construct a high-quality dataset of **34k executable multi-turn trajectories** to initialize the model.
 - **Weak-to-strong filtering**: Pruning trivial cases with Qwen2.5-VL-7B and stratifying difficulty.
 - **Multi-turn atomic supervision**: Decomposing hard cases into verifiable executable trajectories:
   - *Predefined visual operations*
@@ -59,7 +57,7 @@ We optimize with a composite reward mechanism: **Balanced Adaptive Tool-call**.
 - **Sequence-level**: Difficulty-aware incentives to discourage redundant calls on easy problems.
 - **Turn-level**: Immediate penalties for failed executions plus dense correction advantages.
 
-### Stage 3: Test-Time Extend and Scaling
+### Stage 3: Test-Time Extension and Scaling
 Without task-specific fine-tuning, CodeDance exhibits emergent capabilities beyond supervised primitives.
 
 
@@ -91,7 +89,7 @@ bash install.sh
 | **CodeDance-RL** | Data for reinforcement learning optimization | 63k | [HuggingFace](https://huggingface.co/datasets/Peterwatwec/CodeDance-RL) |
 
 </div> 
-You can download the datasets from huggingface. The structure of the datasets is as follows:
+You can download the datasets from Hugging Face. The structure of the datasets is as follows:
 
 ```
 CodeDance/
@@ -150,7 +148,7 @@ The RL dataset is formatted as follows:
 
 
 
-### Step 1: Deploy Judge
+### Step 2: Deploy Judge
 
 RL training scripts are provided in the `examples/` directory.
 
@@ -170,7 +168,7 @@ vllm serve Qwen/Qwen2.5-72B-Instruct \
 export LLM_AS_A_JUDGE_BASE="http://[Your_IP_here]:18901/v1"
 ```
 
-### Step 2: Start Ray Cluster (Multi-Node)
+### Step 3: Start Ray Cluster (Multi-Node)
 
 **On the master node:**
 
@@ -184,7 +182,7 @@ ray start --head --port=<PORT>
 ray start --address=<HEAD_IP>:<PORT> \
 ```
 
-### Step 3: Run RL Training
+### Step 4: Run RL Training
 
 
 
@@ -195,7 +193,7 @@ ray start --address=<HEAD_IP>:<PORT> \
 We provide an evaluation script in `eval/eval.py`. To run the evaluation, you need to first deploy both the judge model and the model to be evaluated as OpenAI-compatible APIs.
 
 **Step 1: Set up the Judge Model API**
-Ensure the judge model API is running (as described in Step 1 of RL Training) and set the environment variable:
+Ensure the judge model API is running (as described in Step 2 of RL Training) and set the environment variable:
 ```bash
 export LLM_AS_A_JUDGE_BASE="http://[Your_IP_here]:18901/v1"
 ```
